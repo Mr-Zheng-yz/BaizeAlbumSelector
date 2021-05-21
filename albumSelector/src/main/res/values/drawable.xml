@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="glide_default">#00000000</drawable>
+    <drawable name="glide_error">#00000000</drawable>
+    <drawable name="transparent">#00000000</drawable>
+    <drawable name="white">#ffffff</drawable>
+    <drawable name="placeholder_rectangle">#999999</drawable>
+    <drawable name="placeholder_transparent">#00000000</drawable>
+</resources>

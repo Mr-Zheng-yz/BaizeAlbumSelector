@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/file_image_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginTop="0.5dp"
+    android:baselineAligned="false"
+    android:descendantFocusability="blocksDescendants"
+    android:gravity="center"
+    android:paddingLeft="0.25dp"
+    android:paddingRight="0.25dp">
+
+    <ImageView
+        android:id="@+id/file_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/file_frame_bard"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:background="#55000000"
+        app:layout_constraintBottom_toBottomOf="@id/file_image"
+        app:layout_constraintLeft_toLeftOf="@id/file_image"
+        app:layout_constraintRight_toRightOf="@id/file_image"
+        app:layout_constraintTop_toTopOf="@id/file_image" />
+
+    <TextView
+        android:id="@+id/file_debug_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#66000000"
+        android:gravity="left"
+        android:paddingStart="3dp"
+        android:paddingEnd="3dp"
+        android:textColor="#fff"
+        android:textSize="6dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:ignore="SpUsage,RtlHardcoded"
+        tools:text="文件大小: 3.5M\n宽高比:1.77777\n添加时间: 01-20 00:01:01\n修改时间: 01-20 00:01:01"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_video_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_marginBottom="16dp"
+        android:drawableStart="@drawable/icon_video"
+        android:drawablePadding="4dp"
+        android:gravity="center_vertical"
+        android:textColor="#fff"
+        android:textSize="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="1分56秒" />
+
+    <FrameLayout
+        android:id="@+id/file_select_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintRight_toRightOf="@id/file_image"
+        app:layout_constraintTop_toTopOf="@id/file_image">
+
+        <TextView
+            android:id="@+id/file_select_order"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="right|top"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/album_empty_circle"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:maxLength="8"
+            android:maxLines="1"
+            android:textColor="#fff"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            tools:ignore="SpUsage,RtlHardcoded"
+            tools:text="5" />
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

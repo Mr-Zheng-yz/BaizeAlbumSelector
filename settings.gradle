@@ -1,0 +1,3 @@
+include ':albumSelector'
+include ':app'
+rootProject.name = "BaizeAlbumSelector"

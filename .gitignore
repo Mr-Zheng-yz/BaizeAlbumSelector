@@ -1,0 +1,15 @@
+*/bin/
+*gen/
+*build/
+*/proguard/
+.settings
+.gradle/
+.idea/
+.classpath
+*.iml
+local.properties
+captures
+
+.DS_Store
+*/.DS_Store
+apk/release/

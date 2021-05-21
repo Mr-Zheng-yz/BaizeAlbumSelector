@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/album_custom_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/album_custom_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="7dp"
+            android:scaleType="fitCenter"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/ic_toolbar_back_action"
+            app:tint="#fff"
+            tools:ignore="RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/album_folder_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/album_custom_back"
+            android:ellipsize="end"
+            android:maxLength="8"
+            android:maxLines="1"
+            android:textColor="#fff"
+            android:textSize="17dp"
+            android:textStyle="bold"
+            tools:ignore="SpUsage,RtlHardcoded,RelativeOverlap"
+            tools:text="12/300" />
+
+        <ImageView
+            android:id="@+id/album_select_info_image"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:scaleType="centerCrop"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            app:tint="#fff"
+            android:src="@drawable/album_file_select"
+            tools:ignore="RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/album_select_info"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="22dp"
+            android:background="@drawable/album_large_fill_circle"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLength="8"
+            android:maxLines="1"
+            android:textColor="#333"
+            android:textSize="13dp"
+            tools:ignore="SpUsage,RtlHardcoded"
+            tools:text="8" />
+
+    </RelativeLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/image_viewpager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/file_select_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/album_custom_toolbar" />
+
+    <LinearLayout
+        android:id="@+id/file_select_view"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="#e6000000"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textColor="#fff"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            tools:ignore="HardcodedText,SpUsage"
+            android:text="确认"
+            tools:text="确认" />
+
+        <TextView
+            android:id="@+id/file_select_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="16dp"
+            android:textColor="#fff"
+            tools:ignore="SpUsage"
+            tools:text="(5/10)" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

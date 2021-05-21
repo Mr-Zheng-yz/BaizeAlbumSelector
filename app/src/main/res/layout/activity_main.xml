@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".MainActivity">
+
+    <EditText
+        android:id="@+id/et_max_limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="选择的图片上限"
+        android:inputType="number"
+        android:text="9" />
+
+    <Switch
+        android:id="@+id/is_autoFinish"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:text="选择后关闭Activity" />
+
+    <Switch
+        android:id="@+id/is_supportGif"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="支持Gif" />
+
+    <Switch
+        android:id="@+id/is_supportVideo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="支持视频" />
+
+    <Switch
+        android:id="@+id/is_defaultVideo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="默认视频文件夹" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="openAlbum"
+        android:text="打开相册" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="已选择文件：" />
+
+    <TextView
+        android:id="@+id/tv_selected"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:padding="12dp" />
+
+</LinearLayout>
