@@ -16,11 +16,6 @@ import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.baize.albumselector.bean.MediaFolder
 import com.baize.albumselector.bean.MediaItem
-import com.baize.albumselector.extensin.getArgumentsArrayStringList
-import com.baize.albumselector.extensin.getArgumentsBoolean
-import com.baize.albumselector.extensin.getArgumentsInt
-import com.baize.albumselector.extensin.getArgumentsString
-import com.baize.albumselector.utils.CheckFileAvailable
 import com.baize.albumselector.view.CustomVideoView
 import com.bumptech.glide.Glide
 
@@ -134,7 +129,8 @@ class AlbumFilePreviewFragment : Fragment(), OnImagesLoadedListener,
 //            EventBusUtils.sendEvent(AlbumSelectFileChangeEvent(selectPhotonFiles))
         } else {
             if (albumViewModel.albumSelectConfig.maxSelectLimit == 1) {
-                if (!CheckFileAvailable.checkFileAvailable(albumViewModel.getCurrentMediaItem())) return
+                if (!albumViewModel.albumSelectConfig.checkFileAvailable(albumViewModel.getCurrentMediaItem())) return
+//                if (!CheckFileAvailable.checkFileAvailable(albumViewModel.getCurrentMediaItem())) return
 //                selectPhotonFiles.clear()
                 tempSelectFiles.clear()
 //                albumViewModel.selectedMediaFiles.value?.clear()
@@ -143,7 +139,8 @@ class AlbumFilePreviewFragment : Fragment(), OnImagesLoadedListener,
                     Toast.makeText(activity, "最多只能选${albumViewModel.albumSelectConfig.maxSelectLimit}张图片", Toast.LENGTH_SHORT).show()
                     return
                 }
-                if (!CheckFileAvailable.checkFileAvailable(albumViewModel.getCurrentMediaItem())) return
+                if (!albumViewModel.albumSelectConfig.checkFileAvailable(albumViewModel.getCurrentMediaItem())) return
+//                if (!CheckFileAvailable.checkFileAvailable(albumViewModel.getCurrentMediaItem())) return
             }
 //            albumViewModel.selectedMediaFiles.value?.add(albumViewModel.getSelectedMediaFiles().size,currentFilePath)
             tempSelectFiles.add(tempSelectFiles.size,currentFilePath)

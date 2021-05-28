@@ -194,5 +194,22 @@
             android:id="@+id/fragment_folder_page"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/empty_layout"
+            android:layout_gravity="center"
+            android:text="存储卡无图片"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ProgressBar
+            android:id="@+id/loading_bar"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
     </FrameLayout>
+
+
 </LinearLayout>

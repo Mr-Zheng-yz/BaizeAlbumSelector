@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.baize.albumselector.bean.MediaFolder
 import com.baize.albumselector.bean.MediaItem
 import com.baize.albumselector.extensin.*
-import com.baize.albumselector.utils.CheckFileAvailable
 import com.baize.albumselector.utils.FileUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -37,6 +36,12 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
         }
     }
 
+    private val empty_layout: TextView by lazy {
+        requireView().findViewById(R.id.empty_layout)
+    }
+    private val loadingBar: ProgressBar by lazy {
+        requireView().findViewById<ProgressBar>(R.id.loading_bar)
+    }
     private val fileSelectNumber: TextView by lazy {
         requireView().findViewById<TextView>(R.id.file_select_number)
     }
@@ -96,12 +101,6 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
             fileSelectNumber.text = ("(${selectFiles.size}/${albumViewModel.albumSelectConfig.maxSelectLimit})")
         }
         Log.i("yanze","viewModel: == Activity#VieModel? ${albumViewModel == (activity as? AlbumSelectorActivity)?.albumViewModel}")
-//        limitNumber = getArgumentsInt(MultimediaTools.MAX_LIMIT, 9)
-//        selectPhotonFiles = getArgumentsArrayStringList(MultimediaTools.SELECTOR_PATH)
-//        autoFinishActivity = getArgumentsBoolean(MultimediaTools.AUTO_FINISH_ACTIVITY, true)
-//        supportGif = getArgumentsBoolean(MultimediaTools.SUPPORT_GIF, false)
-//        supportVideo = getArgumentsBoolean(MultimediaTools.SUPPORT_VIDEO, false)
-//        defaultVideo = getArgumentsBoolean(MultimediaTools.DEFAULT_VIDEO, false)
         albumRecyclerView.apply {
             layoutManager = GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false)
             adapter = albumAdapter
@@ -115,7 +114,7 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
                 return@setOnClickListener
             }
             albumViewModel.currentSortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC"
-//            showLoading()
+            showLoading()
             queryImages(albumViewModel.currentImageFolder?.path)
         }
         orderByModifyLayout?.setOnClickListener {
@@ -123,7 +122,7 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
                 return@setOnClickListener
             }
             albumViewModel.currentSortOrder = MediaStore.Images.Media.DATE_MODIFIED + " DESC"
-//            showLoading()
+            showLoading()
             queryImages(albumViewModel.currentImageFolder?.path)
         }
         fileSelectFinishView.setOnClickListener {
@@ -135,14 +134,7 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
                 }
                 activity?.finish()
             } else {
-                // TODO 可配置自定义通知方式
-//                EventBusUtils.sendEvent(
-//                    AlbumSelectFileEvent(
-//                        "相册选择图片确认",
-//                        pageUniqueId,
-//                        selectPhotonFiles
-//                    )
-//                )
+                MultimediaTools.selectCompleteListener?.invoke(albumViewModel.getSelectedMediaFiles())
             }
         }
         toolbarContentView.setOnClickListener {
@@ -177,7 +169,6 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             111
         ) {
-            savedInstanceState
             queryImages()
         }
     }
@@ -191,7 +182,7 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
         albumAdapter.datas = selectMediaFolder.images
         albumAdapter.notifyDataSetChanged()
         if (albumAdapter.datas.size == 0) {
-            Toast.makeText(context, "存储卡没有你要选择的图片", Toast.LENGTH_SHORT).show()
+            showEmpty()
         } else {
             showContent()
         }
@@ -232,12 +223,22 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
         albumAdapter.notifyDataSetChanged()
     }
 
-    private fun showContent() {
+    private fun showEmpty() {
+        empty_layout.visibility = View.VISIBLE
+        loadingBar.visibility = View.GONE
+        albumRecyclerView.visibility = View.GONE
+    }
 
+    private fun showContent() {
+        albumRecyclerView.visibility = View.VISIBLE
+        loadingBar.visibility = View.GONE
+        empty_layout.visibility = View.GONE
     }
 
     private fun showLoading() {
-
+        loadingBar.visibility = View.VISIBLE
+        empty_layout.visibility = View.GONE
+        albumRecyclerView.visibility = View.GONE
     }
 
     val selectCache = arrayListOf<Int>()
@@ -317,7 +318,7 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
                         notifyItemChanged(position)
                     } else {
                         if (albumViewModel.albumSelectConfig.maxSelectLimit == 1) {
-                            if (!CheckFileAvailable.checkFileAvailable(data)) return@setOnClickListener
+                            if (!albumViewModel.albumSelectConfig.checkFileAvailable(data)) return@setOnClickListener
                             val selectPhotonFilePath = if (albumViewModel.getSelectedMediaFiles().isNotEmpty()) {
                                 albumViewModel.getSelectedMediaFiles()[0]
 //                                tempSelectedFiles[0]
@@ -337,7 +338,8 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
                                 ).show()
                                 return@setOnClickListener
                             }
-                            if (!CheckFileAvailable.checkFileAvailable(data)) return@setOnClickListener
+                            if (!albumViewModel.albumSelectConfig.checkFileAvailable(data)) return@setOnClickListener
+//                            if (!CheckFileAvailable.checkFileAvailable(data)) return@setOnClickListener
                         }
                         selectCache.add(position)
                         albumViewModel.getSelectedMediaFiles().add(albumViewModel.selectFileSize,data.path)

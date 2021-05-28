@@ -28,9 +28,6 @@ class AlbumSelectorActivity : AppCompatActivity(), OnLocalImageFileClickListener
             this,
             ViewModelProvider.NewInstanceFactory()
         ).get(AlbumViewModel::class.java)
-//        albumViewModel = ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory(this.application)).get(AlbumViewModel::class.java)
-//        albumViewModel = ViewModelProvider.NewInstanceFactory().create(AlbumViewModel::class.java)
-//        albumViewModel = ViewModelProvider.AndroidViewModelFactory(application).create(AlbumViewModel::class.java)
 
         albumViewModel.albumSelectConfig = SelectAlbumConfig.Builder()
             .maxSelectLimit(intent.extras?.getInt(MultimediaTools.MAX_LIMIT) ?: 9)
@@ -39,10 +36,6 @@ class AlbumSelectorActivity : AppCompatActivity(), OnLocalImageFileClickListener
             .supportVideo(intent.extras?.getBoolean(MultimediaTools.SUPPORT_VIDEO) ?: false)
             .defaultVideo(intent.extras?.getBoolean(MultimediaTools.DEFAULT_VIDEO) ?: false)
             .build()
-//        albumViewModel.maxSelectLimit = intent.extras?.getInt(MultimediaTools.MAX_LIMIT) ?: 9
-//        albumViewModel.supportGif = intent.extras?.getBoolean(MultimediaTools.SUPPORT_GIF) ?: false
-//        albumViewModel.supportVideo = intent.extras?.getBoolean(MultimediaTools.SUPPORT_VIDEO) ?: false
-//        albumViewModel.isDefaultVideo = intent.extras?.getBoolean(MultimediaTools.DEFAULT_VIDEO) ?: false
 
         albumFileGridFragment = AlbumFileGridFragment.getInstance(intent.extras)
         supportFragmentManager.beginTransaction()

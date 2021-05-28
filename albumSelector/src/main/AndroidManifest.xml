@@ -3,7 +3,7 @@
     package="com.baize.albumselector">
 
     <application>
-        <activity android:name=".AlbumSelectorActivity"></activity>
+        <activity android:name=".AlbumSelectorActivity" />
     </application>
 
 </manifest>
