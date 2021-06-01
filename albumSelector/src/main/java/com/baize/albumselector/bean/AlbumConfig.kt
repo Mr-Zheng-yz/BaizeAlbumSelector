@@ -23,12 +23,12 @@ data class SelectAlbumConfig(
     }
 
     class Builder {
-        var maxSelectLimit: Int = 9
-        var autoFinishActivity: Boolean = false
-        var supportGif: Boolean = false
-        var supportVideo: Boolean = false
-        var isDefaultVideo: Boolean = false
-        var checkFileAvailableList: MutableList<CheckFileAvailableInterface> = mutableListOf()
+        internal var maxSelectLimit: Int = 9
+        internal var autoFinishActivity: Boolean = false
+        internal var supportGif: Boolean = false
+        internal var supportVideo: Boolean = false
+        internal var isDefaultVideo: Boolean = false
+        internal var checkFileAvailableList: MutableList<CheckFileAvailableInterface> = mutableListOf()
 
         fun maxSelectLimit(limit: Int): Builder {
             maxSelectLimit = limit
@@ -61,8 +61,7 @@ data class SelectAlbumConfig(
         }
 
         fun build(): SelectAlbumConfig =
-            SelectAlbumConfig(maxSelectLimit, supportGif, supportVideo, isDefaultVideo)
-
+            SelectAlbumConfig(maxSelectLimit,autoFinishActivity, supportGif, supportVideo, isDefaultVideo)
     }
 
 }

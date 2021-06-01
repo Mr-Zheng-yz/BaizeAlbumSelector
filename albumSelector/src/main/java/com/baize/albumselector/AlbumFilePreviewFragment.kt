@@ -76,15 +76,7 @@ class AlbumFilePreviewFragment : Fragment(), OnImagesLoadedListener,
             ViewModelProvider.NewInstanceFactory()).get(AlbumViewModel::class.java)
 
         mViewpager.addOnPageChangeListener(this)
-//        albumViewModel.albumSelectConfig.maxSelectLimit = getArgumentsInt(MultimediaTools.MAX_LIMIT, 9)
-//        selectPhotonFiles = getArgumentsArrayStringList(MultimediaTools.SELECTOR_PATH)
-//        viewPagerLastItemPosition = getArgumentsInt(MultimediaTools.CURRENT_POSITION, 0)
-//        val imageFolderPath = getArgumentsString(MultimediaTools.IMAGE_FOLDER_PATH, "")
-//        autoFinishActivity = getArgumentsBoolean(MultimediaTools.AUTO_FINISH_ACTIVITY, true)
-//        supportGif = getArgumentsBoolean(MultimediaTools.SUPPORT_GIF, false)
-//        supportVideo = getArgumentsBoolean(MultimediaTools.SUPPORT_VIDEO, false)
-//        defaultVideo = getArgumentsBoolean(MultimediaTools.DEFAULT_VIDEO, false)
-        fileSelectNumber.text = ("(${albumViewModel.getSelectedMediaFiles().size}/$albumViewModel.albumSelectConfig.maxSelectLimit)")
+        fileSelectNumber.text = ("(${albumViewModel.getSelectedMediaFiles().size}/${albumViewModel.albumSelectConfig.maxSelectLimit})")
         customBack.setOnClickListener {
             activity?.onBackPressed()
         }
@@ -99,7 +91,6 @@ class AlbumFilePreviewFragment : Fragment(), OnImagesLoadedListener,
 
     private fun queryImages(folderPath: String, sortOrder: String) {
         if (albumViewModel.allMediaFolders.size == 0) {
-//            showCoverLoading()
             val imageDataSource = AlbumDataSource(requireContext(), this, lifecycle = lifecycle)
             imageDataSource.query(folderPath, sortOrder,
                 albumViewModel.albumSelectConfig.supportGif, albumViewModel.albumSelectConfig.supportVideo, albumViewModel.albumSelectConfig.isDefaultVideo)
@@ -122,11 +113,7 @@ class AlbumFilePreviewFragment : Fragment(), OnImagesLoadedListener,
         val checked = albumViewModel.getSelectedMediaFiles().contains(currentFilePath)
         val tempSelectFiles = albumViewModel.selectedMediaFiles.value ?: arrayListOf()
         if (checked) {
-//            albumViewModel.getSelectedMediaFiles().remove(currentFilePath)
             tempSelectFiles.remove(currentFilePath)
-//            selectPhotonFiles.remove(currentFilePath)
-            //TODO 通知九宫格页面更新刷新
-//            EventBusUtils.sendEvent(AlbumSelectFileChangeEvent(selectPhotonFiles))
         } else {
             if (albumViewModel.albumSelectConfig.maxSelectLimit == 1) {
                 if (!albumViewModel.albumSelectConfig.checkFileAvailable(albumViewModel.getCurrentMediaItem())) return

@@ -1,5 +1,6 @@
 package com.baize.albumselector
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,10 +12,10 @@ import com.baize.albumselector.bean.SelectAlbumConfig
 class AlbumSelectorActivity : AppCompatActivity(), OnLocalImageFileClickListener {
 
     companion object {
-        fun open(context: Context, bundle: Bundle) {
+        fun open(requestCode:Int,context: Activity, bundle: Bundle) {
             val intent = Intent(context, AlbumSelectorActivity::class.java)
             intent.putExtras(bundle)
-            context.startActivity(intent)
+            context.startActivityForResult(intent,requestCode)
         }
     }
 
@@ -28,16 +29,19 @@ class AlbumSelectorActivity : AppCompatActivity(), OnLocalImageFileClickListener
             this,
             ViewModelProvider.NewInstanceFactory()
         ).get(AlbumViewModel::class.java)
-
-        albumViewModel.albumSelectConfig = SelectAlbumConfig.Builder()
-            .maxSelectLimit(intent.extras?.getInt(MultimediaTools.MAX_LIMIT) ?: 9)
-            .maxSelectLimit(intent.extras?.getInt(MultimediaTools.MAX_LIMIT) ?: 9)
-            .supportGif(intent.extras?.getBoolean(MultimediaTools.SUPPORT_GIF) ?: false)
-            .supportVideo(intent.extras?.getBoolean(MultimediaTools.SUPPORT_VIDEO) ?: false)
-            .defaultVideo(intent.extras?.getBoolean(MultimediaTools.DEFAULT_VIDEO) ?: false)
-            .build()
-
+        albumViewModel.albumSelectConfig =
+            (intent.extras?.getSerializable(MultimediaTools.ALBUM_CONFIG) as? SelectAlbumConfig)
+                ?: SelectAlbumConfig.Builder()
+                    .maxSelectLimit(intent.extras?.getInt(MultimediaTools.MAX_LIMIT) ?: 9)
+                    .autoFinishActivity(intent.extras?.getBoolean(MultimediaTools.AUTO_FINISH_ACTIVITY) ?: false)
+                    .supportGif(intent.extras?.getBoolean(MultimediaTools.SUPPORT_GIF) ?: false)
+                    .supportVideo(intent.extras?.getBoolean(MultimediaTools.SUPPORT_VIDEO) ?: false)
+                    .defaultVideo(intent.extras?.getBoolean(MultimediaTools.DEFAULT_VIDEO) ?: false)
+                    .build()
         albumFileGridFragment = AlbumFileGridFragment.getInstance(intent.extras)
+        intent.extras?.getStringArrayList(MultimediaTools.SELECTOR_PATH)?.let {
+            albumViewModel.setSelectedMediaFiles(it)
+        }
         supportFragmentManager.beginTransaction()
             .add(R.id.fragment_file_page, albumFileGridFragment!!)
             .commitAllowingStateLoss()
@@ -72,17 +76,17 @@ class AlbumSelectorActivity : AppCompatActivity(), OnLocalImageFileClickListener
         currentSortOrder: String,
         isDefaultVideo: Boolean
     ) {
-        val bundle = Bundle()
-        bundle.putSerializable(MultimediaTools.CURRENT_POSITION, position)
-        bundle.putString(MultimediaTools.IMAGE_FOLDER_PATH, currentImageFolder.path)
-        bundle.putString(MultimediaTools.SORT_ORDER, currentSortOrder)
-        bundle.putInt(MultimediaTools.MAX_LIMIT, limitNumber)
-        bundle.putBoolean(MultimediaTools.AUTO_FINISH_ACTIVITY, autoFinishActivity)
-        bundle.putBoolean(MultimediaTools.SUPPORT_GIF, supportGif)
-        bundle.putBoolean(MultimediaTools.SUPPORT_VIDEO, supportVideo)
-        bundle.putBoolean(MultimediaTools.DEFAULT_VIDEO, isDefaultVideo)
+//        val bundle = Bundle()
+//        bundle.putSerializable(MultimediaTools.CURRENT_POSITION, position)
+//        bundle.putString(MultimediaTools.IMAGE_FOLDER_PATH, currentImageFolder.path)
+//        bundle.putString(MultimediaTools.SORT_ORDER, currentSortOrder)
+//        bundle.putInt(MultimediaTools.MAX_LIMIT, limitNumber)
+//        bundle.putBoolean(MultimediaTools.AUTO_FINISH_ACTIVITY, autoFinishActivity)
+//        bundle.putBoolean(MultimediaTools.SUPPORT_GIF, supportGif)
+//        bundle.putBoolean(MultimediaTools.SUPPORT_VIDEO, supportVideo)
+//        bundle.putBoolean(MultimediaTools.DEFAULT_VIDEO, isDefaultVideo)
         val albumFilePageFragment = AlbumFilePreviewFragment.getInstance()
-        albumFilePageFragment.arguments = bundle
+//        albumFilePageFragment.arguments = bundle
         supportFragmentManager.beginTransaction()
             .add(R.id.fragment_file_page, albumFilePageFragment)
             .addToBackStack(null).commitAllowingStateLoss()

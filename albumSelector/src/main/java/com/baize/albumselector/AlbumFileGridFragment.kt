@@ -65,14 +65,6 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
     }
     private var orderByCreateLayout: View? = null
     private var orderByModifyLayout: View? = null
-//    private var currentImageFolder: MediaFolder? = null
-//    private var selectPhotonFiles = arrayListOf<String>()
-//    private var autoFinishActivity = true
-//    private var limitNumber = 1
-//    private var supportGif = false
-//    private var supportVideo = false
-//    private var defaultVideo = false
-//    private var currentSortOrder = MediaStore.Images.Media.DATE_ADDED + " DESC"
     private var gridWith = 0
     private val albumAdapter by lazy { AlbumAdapter() }
     private lateinit var albumViewModel: AlbumViewModel
@@ -129,10 +121,10 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
             if (albumViewModel.albumSelectConfig.autoFinishActivity) {
                 if (albumViewModel.selectFileSize > 0) {
                     val intent = Intent()
-                    intent.putStringArrayListExtra("SelectPhotonFiles", albumViewModel.getSelectedMediaFiles())
+                    intent.putStringArrayListExtra(MultimediaTools.SELECTOR_PATH, albumViewModel.getSelectedMediaFiles())
                     activity?.setResult(Activity.RESULT_OK, intent)
                 }
-                activity?.finish()
+                requireActivity().finish()
             } else {
                 MultimediaTools.selectCompleteListener?.invoke(albumViewModel.getSelectedMediaFiles())
             }
@@ -201,15 +193,16 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
 
     override fun onImagesLoaded(imageFolders: MutableList<MediaFolder>) {
         albumViewModel.allMediaFolders = imageFolders
-        albumViewModel.currentImageFolder = if (imageFolders.size > 0) {
-            imageFolders[0]
-        } else {
-            null
-        }
-        setAdapterData(albumViewModel.currentImageFolder)
-        if (albumViewModel.allMediaFolders.size > 1) {
-            tipArrow.setImageResource(R.drawable.album_down_arrow)
-            tipArrow.visibility = View.VISIBLE
+        if (imageFolders.isNotEmpty()) {
+            albumViewModel.currentImageFolder = imageFolders[0]
+            setAdapterData(albumViewModel.currentImageFolder)
+            if (albumViewModel.allMediaFolders.size > 1) {
+                tipArrow.setImageResource(R.drawable.album_down_arrow)
+                tipArrow.visibility = View.VISIBLE
+            }
+            showContent()
+        }else{
+            showEmpty()
         }
         toolbarTitle.text = albumViewModel.currentImageFolder?.name ?: ""
     }

@@ -16,26 +16,26 @@
         android:inputType="number"
         android:text="9" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/is_autoFinish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="true"
         android:text="选择后关闭Activity" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/is_supportGif"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="支持Gif" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/is_supportVideo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="支持视频" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/is_defaultVideo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,12 +53,18 @@
         android:padding="8dp"
         android:text="已选择文件：" />
 
-    <TextView
-        android:id="@+id/tv_selected"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:padding="12dp" />
+        android:layout_marginTop="8dp"
+        android:layout_weight="1" />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_selected"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:gravity="center_horizontal"-->
+<!--        android:padding="12dp" />-->
 
 </LinearLayout>
