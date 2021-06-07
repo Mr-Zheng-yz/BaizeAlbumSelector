@@ -182,13 +182,21 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
 
     private fun queryImages(folderPath: String? = null) {
         val imageDataSource = AlbumDataSource(requireContext(), loadedListener = this, lifecycle = lifecycle)
-        imageDataSource.query(
+
+        imageDataSource.queryWithAsyncTask(
             folderPath = folderPath,
             sortOrder = albumViewModel.currentSortOrder,
             supportGif = albumViewModel.albumSelectConfig.supportGif,
             supportVideo = albumViewModel.albumSelectConfig.supportVideo,
             defaultVideo = albumViewModel.albumSelectConfig.isDefaultVideo
         )
+//        imageDataSource.query(
+//            folderPath = folderPath,
+//            sortOrder = albumViewModel.currentSortOrder,
+//            supportGif = albumViewModel.albumSelectConfig.supportGif,
+//            supportVideo = albumViewModel.albumSelectConfig.supportVideo,
+//            defaultVideo = albumViewModel.albumSelectConfig.isDefaultVideo
+//        )
     }
 
     override fun onImagesLoaded(imageFolders: MutableList<MediaFolder>) {
@@ -265,12 +273,13 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
             val fileImageView: ImageView = view.findViewById(R.id.file_image)
             val fileDebugInfo: TextView = view.findViewById(R.id.file_debug_info)
             val frameBard: FrameLayout = view.findViewById(R.id.file_frame_bard)
+            val tvVideoDuration: TextView = view.findViewById(R.id.tv_video_duration)
             fun bindView(data: MediaItem, position: Int) {
                 val layoutParams = fileItemView.layoutParams
                 layoutParams.width = gridWith
                 layoutParams.height = gridWith
                 fileItemView.layoutParams = layoutParams
-                if (BuildConfig.DEBUG) {
+                if (false) {
                     fileDebugInfo?.visibility = View.VISIBLE
                     fileDebugInfo?.text =
                         "大小: ${FileUtil.convertStorage(FileUtil.getFileSize(data.path))}" +
@@ -283,6 +292,8 @@ class AlbumFileGridFragment : Fragment(), OnImagesLoadedListener {
                                 "\n添加时间: ${data.getAddDateText()}" +
                                 "\n修改时间: ${data.getModifyDateText()}"
                 }
+                tvVideoDuration.visibility = if (data.isVideo()) View.VISIBLE else View.GONE
+                tvVideoDuration.text = data.getDurationDesc()
                 val index = albumViewModel.getSelectedMediaFiles().indexOf(data.path)
                 if (index >= 0) {
                     frameBard?.setBackgroundColor(Color.parseColor("#99000000"))

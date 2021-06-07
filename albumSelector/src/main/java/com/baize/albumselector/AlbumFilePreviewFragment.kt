@@ -92,7 +92,7 @@ class AlbumFilePreviewFragment : Fragment(), OnImagesLoadedListener,
     private fun queryImages(folderPath: String, sortOrder: String) {
         if (albumViewModel.allMediaFolders.size == 0) {
             val imageDataSource = AlbumDataSource(requireContext(), this, lifecycle = lifecycle)
-            imageDataSource.query(folderPath, sortOrder,
+            imageDataSource.queryWithAsyncTask(folderPath, sortOrder,
                 albumViewModel.albumSelectConfig.supportGif, albumViewModel.albumSelectConfig.supportVideo, albumViewModel.albumSelectConfig.isDefaultVideo)
         } else {
             albumViewModel.allMediaFolders.find {

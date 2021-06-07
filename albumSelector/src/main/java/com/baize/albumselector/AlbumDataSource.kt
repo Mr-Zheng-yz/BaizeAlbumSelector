@@ -1,6 +1,8 @@
 package com.baize.albumselector
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.os.AsyncTask
 import android.os.Environment
 import android.os.SystemClock
 import android.provider.MediaStore
@@ -11,7 +13,6 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.baize.albumselector.bean.MediaFolder
 import com.baize.albumselector.bean.MediaItem
-import kotlinx.coroutines.*
 import java.io.File
 
 class AlbumDataSource(
@@ -54,33 +55,62 @@ class AlbumDataSource(
     private var whereArgs = arrayOf("image/jpeg", "image/png", "image/jpg")
 
     private val mediaFolders = ArrayList<MediaFolder>()   //所有的图片文件夹
-    private var queryMediaJob: Job? = null
+//    private var queryMediaJob: Job? = null
 
-    fun query(
+    private val asyncTask = @SuppressLint("StaticFieldLeak")
+    object : AsyncTask<String, Int, ArrayList<MediaItem>>() {
+        override fun doInBackground(vararg params: String?): ArrayList<MediaItem> {
+            val allImage = queryImage(params[0], params[1], params[2] == "true")
+            if (params[3] == "true") {
+                queryVideo(params[0], params[1], params[4] == "true", allImage)
+            }
+            Log.i("yanze", "query Done!")
+            return allImage
+        }
+
+        override fun onPostExecute(result: ArrayList<MediaItem>?) {
+            loadedListener.onImagesLoaded(mediaFolders)
+        }
+
+    }
+
+    fun queryWithAsyncTask(
         folderPath: String?,
         sortOrder: String,
         supportGif: Boolean = true,
         supportVideo: Boolean = true,
         defaultVideo: Boolean = false
     ) {
-        mediaFolders.clear()
-        queryMediaJob = GlobalScope.launch {
-            withContext(Dispatchers.IO) {
-                val allImage = queryImage(folderPath, sortOrder, supportGif)
-                if (supportVideo) {
-                    queryVideo(folderPath, sortOrder, defaultVideo, allImage)
-                }
-            }
-            withContext(Dispatchers.Main){
-                Log.i("yanze", "query Done!")
-                loadedListener.onImagesLoaded(mediaFolders)
-            }
-        }
+        // 0:path 1:sortOrder 2:supportGif 3:supportVideo 4:defaultVideo
+        asyncTask.execute(folderPath,sortOrder,supportGif.toString(),supportVideo.toString(),defaultVideo.toString())
     }
 
-    suspend fun queryImage(
+    //使用携程查询
+//    fun query(
+//        folderPath: String?,
+//        sortOrder: String,
+//        supportGif: Boolean = true,
+//        supportVideo: Boolean = true,
+//        defaultVideo: Boolean = false
+//    ) {
+//        mediaFolders.clear()
+//        queryMediaJob = GlobalScope.launch {
+//            withContext(Dispatchers.IO) {
+//                val allImage = queryImage(folderPath, sortOrder, supportGif)
+//                if (supportVideo) {
+//                    queryVideo(folderPath, sortOrder, defaultVideo, allImage)
+//                }
+//            }
+//            withContext(Dispatchers.Main) {
+//                Log.i("yanze", "query Done!")
+//                loadedListener.onImagesLoaded(mediaFolders)
+//            }
+//        }
+//    }
+
+    private fun queryImage(
         folderPath: String?,
-        sortOrder: String,
+        sortOrder: String?,
         supportGif: Boolean = false
     ): ArrayList<MediaItem> {
         if (supportGif) {
@@ -94,7 +124,7 @@ class AlbumDataSource(
                     IMAGE_PROJECTION,
                     where,
                     whereArgs,
-                    sortOrder
+                    sortOrder ?: MediaStore.Images.Media.DATE_ADDED + " DESC"
                 )
             }
             else -> {
@@ -174,9 +204,9 @@ class AlbumDataSource(
         return allImages
     }
 
-    suspend fun queryVideo(
+    private fun queryVideo(
         folderPath: String?,
-        sortOrder: String,
+        sortOrder: String?,
         defaultVideo: Boolean,
         allImages: ArrayList<MediaItem>
     ) {
@@ -188,7 +218,7 @@ class AlbumDataSource(
                     VIDEO_PROJECTION,
                     videoWhere,
                     arrayOf("video/mp4"),
-                    sortOrder
+                    sortOrder ?: sortOrder ?: MediaStore.Video.Media.DATE_ADDED + " DESC"
                 )
             }
             else -> {
@@ -297,7 +327,8 @@ class AlbumDataSource(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     fun onDestroy() {
-        queryMediaJob?.cancel()
+        asyncTask.cancel(true)
+//        queryMediaJob?.cancel()
         lifecycle.removeObserver(this)
     }
 }

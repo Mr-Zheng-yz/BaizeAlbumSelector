@@ -11,7 +11,7 @@ class LinearVerticalDecoration(
     private val dividerColor: Int = -1,
     private val marginLeft: Int = 0,
     private val marginRight: Int = 0,
-    private val marginTop: Int = 0,
+    private val marginTop: Int = 0
 ) : RecyclerView.ItemDecoration() {
 
     private val dividerPaint: Paint by lazy {

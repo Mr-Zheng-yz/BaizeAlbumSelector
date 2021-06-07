@@ -49,8 +49,8 @@ dependencies {
         exclude group: 'androidx.core'
     }
     //携程
-    def coroutines = "1.3.9"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines"
+//    def coroutines = "1.3.9"
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
+//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines"
 
 }
